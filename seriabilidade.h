@@ -1,0 +1,32 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+/*
+    A entrada deve ser feita pela entrada padrão (stdin).
+    O arquivo é formado por uma sequência de linhas, onde
+    cada linha representa uma transação chegando. Cada linha
+    tem 4 campos: o primeiro é o tempo de chegada, o segundo
+    é o identificador da transação, o terceiro é a operação
+    (R=read, W=write, C=commit) e o quarto o atributo que será
+    lido/escrito. Estas linhas estão ordenadas pelo primeiro
+    campo (tempos menores no início indicando a linha do tempo).
+*/
+
+typedef struct transacao
+{
+    struct transacao *next;
+    struct transacao *prev;
+    int chegadaT;
+    int transacaoI;
+    char operacao;
+    char atributo;
+
+} transacao_t;
+
+transacao_t *cria_transacao(int chegada, int transacao, char operacao, char atributo);
+
+int adiciona_transacao(int id, int **transacoes_id, int *qtd);
+
+int busca_indice(int id, int *transacoes_id, int qtd);
+
+void printa_transacao(void *elem);

@@ -2,7 +2,7 @@ CFLAGS = -Wall -g
 
 PROGRAM = escalona
 
-Objs = escalona.o queue.o
+Objs = escalona.o queue.o seriabilidade.o
 
 all: escalona
 
@@ -14,6 +14,9 @@ escalona: $(Objs)
 
 queue.o: queue.c queue.h
 	gcc $(CFLAGS) -c queue.c
+
+seriabilidade.o: seriabilidade.c seriabilidade.h
+	gcc $(CFLAGS) -c seriabilidade.c
 
 
 clean:
