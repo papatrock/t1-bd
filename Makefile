@@ -9,8 +9,8 @@ all: escalona
 debug: clean
 	make CFLAGS="$(CFLAGS) -DDEBUG" all
 
-escalona: $(PROGRAM).o $(Objs)
-	gcc $(PROGRAM).o $(Objs) $(CFLAGS) -o ppos
+escalona: $(Objs)
+	gcc $(Objs) $(CFLAGS) -o escalona
 
 queue.o: queue.c queue.h
 	gcc $(CFLAGS) -c queue.c
