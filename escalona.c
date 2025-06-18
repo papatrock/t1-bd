@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include "queue.h"
 #include "seriabilidade.h"
-
-#define READ R
-#define WRITE W
-#define COMMIT C
+#include "visao-equivalente.h"
+#include "transacao.h"
 
 void imprimeMatriz(int **matriz, int linhas, int colunas)
 {
@@ -16,6 +14,13 @@ void imprimeMatriz(int **matriz, int linhas, int colunas)
         }
         printf("\n");
     }
+}
+
+void libera_matriz(int **m, int n)
+{
+    for (int i = 0; i < n; i++)
+        free(m[i]);
+    free(m);
 }
 // gcc escalona.c queue.c queue.h -Wall -g -o escalona
 
@@ -49,6 +54,32 @@ int main(int argc, char *args[])
 #ifdef DEBUG
     imprimeMatriz(matrizAdjacencia, qtdTransacoesUnicas, qtdTransacoesUnicas);
 #endif
+
+    monta_grafo((transacao_t *)fila_transacoes, matrizAdjacencia, transacoes_id, qtdTransacoesUnicas);
+
+    int serializavel = !tem_ciclo(matrizAdjacencia, qtdTransacoesUnicas);
+
+    int equivalente_visao = verifica_equivalencia_visao(fila_transacoes, transacoes_id, qtdTransacoesUnicas);
+
+    printf("1 ");
+
+    for (int i = 0; i < qtdTransacoesUnicas; i++)
+    {
+        printf("T%d", transacoes_id[i]);
+        if (i < qtdTransacoesUnicas - 1)
+            printf(",");
+        else
+            printf(" ");
+    }
+    printf("%s ", serializavel ? "SS" : "NS");
+
+    printf("%s\n", equivalente_visao ? "SV" : "NV");
+
+    // imprimeMatriz(matrizAdjacencia, qtdTransacoesUnicas, qtdTransacoesUnicas);
+    for (int i = 0; i < qtdTransacoesUnicas; i++)
+        free(matrizAdjacencia[i]);
+    free(matrizAdjacencia);
+    free(transacoes_id);
 
     return 0;
 }

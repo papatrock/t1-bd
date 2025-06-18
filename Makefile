@@ -1,8 +1,13 @@
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Wbad-function-cast \
+	  -Wmissing-prototypes \
+	  -Wnested-externs \
+	  -Wold-style-definition \
+	  -Wstrict-prototypes \
+	  -Wwrite-strings
 
 PROGRAM = escalona
 
-Objs = escalona.o queue.o seriabilidade.o
+Objs = escalona.o queue.o seriabilidade.o visao-equivalente.o
 
 all: escalona
 
@@ -17,6 +22,9 @@ queue.o: queue.c queue.h
 
 seriabilidade.o: seriabilidade.c seriabilidade.h
 	gcc $(CFLAGS) -c seriabilidade.c
+
+visao-equivalente.o: visao-equivalente.c visao-equivalente.h
+	gcc $(CFLAGS) -c visao-equivalente.c
 
 
 clean:

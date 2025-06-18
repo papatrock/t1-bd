@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include "transacao.h"
 
 /*
     A entrada deve ser feita pela entrada padrão (stdin).
@@ -12,21 +14,16 @@
     campo (tempos menores no início indicando a linha do tempo).
 */
 
-typedef struct transacao
-{
-    struct transacao *next;
-    struct transacao *prev;
-    int chegadaT;
-    int transacaoI;
-    char operacao;
-    char atributo;
-
-} transacao_t;
-
 transacao_t *cria_transacao(int chegada, int transacao, char operacao, char atributo);
 
 int adiciona_transacao(int id, int **transacoes_id, int *qtd);
 
+void monta_grafo(transacao_t *inicio, int **grafo, int *transacoes_id, int qtd_transacoes);
+
 int busca_indice(int id, int *transacoes_id, int qtd);
+
+int dfs(int v, int **grafo, int *visitado, int n);
+
+int tem_ciclo(int **grafo, int n);
 
 void printa_transacao(void *elem);
