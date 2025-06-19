@@ -7,7 +7,7 @@ CFLAGS = -Wall -g -Wbad-function-cast \
 
 PROGRAM = escalona
 
-Objs = escalona.o queue.o seriabilidade.o visao-equivalente.o
+Objs = escalona.o queue.o seriabilidade.o visao-equivalente.o transacao.o
 
 all: escalona
 
@@ -25,6 +25,9 @@ seriabilidade.o: seriabilidade.c seriabilidade.h
 
 visao-equivalente.o: visao-equivalente.c visao-equivalente.h
 	gcc $(CFLAGS) -c visao-equivalente.c
+
+transacao.o: transacao.c transacao.h
+	gcc $(CFLAGS) -c transacao.c
 
 
 clean:

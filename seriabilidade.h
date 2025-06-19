@@ -14,10 +14,6 @@
     campo (tempos menores no início indicando a linha do tempo).
 */
 
-transacao_t *cria_transacao(int chegada, int transacao, char operacao, char atributo);
-
-int adiciona_transacao(int id, int **transacoes_id, int *qtd);
-
 void monta_grafo(transacao_t *inicio, int **grafo, int *transacoes_id, int qtd_transacoes);
 
 int busca_indice(int id, int *transacoes_id, int qtd);

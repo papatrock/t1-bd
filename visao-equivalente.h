@@ -1,4 +1,5 @@
 #include "transacao.h"
+#include <string.h>
 
 typedef struct
 {

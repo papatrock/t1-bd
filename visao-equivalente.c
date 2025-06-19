@@ -1,6 +1,6 @@
 #include "visao-equivalente.h"
-#include "seriabilidade.h"
 #include "queue.h"
+#include "transacao.h"
 
 void troca_ids(int *ids, int a, int b)
 {
@@ -73,8 +73,7 @@ int acha_relacoes_leitura(transacao_t *inicio, leitura_t *leituras, int tamanho_
 int visao_equivalente(transacao_t *original, transacao_t *visao, int *ids, int qtd_transacoes)
 {
     int ultimas_orig[256], ultimas_visao[256];
-    leitura_t leituras_orig[100], leituras_visao[100]; // ajuste se necessário
-
+    leitura_t leituras_orig[1024], leituras_visao[1024];
     acha_ultimas_escritas(original, ultimas_orig);
     acha_ultimas_escritas(visao, ultimas_visao);
 
@@ -84,8 +83,8 @@ int visao_equivalente(transacao_t *original, transacao_t *visao, int *ids, int q
             return 0;
     }
 
-    int n_leituras_orig = acha_relacoes_leitura(original, leituras_orig, 100);
-    int n_leituras_visao = acha_relacoes_leitura(visao, leituras_visao, 100);
+    int n_leituras_orig = acha_relacoes_leitura(original, leituras_orig, 1024);
+    int n_leituras_visao = acha_relacoes_leitura(visao, leituras_visao, 1024);
 
     if (n_leituras_orig != n_leituras_visao)
         return 0;
@@ -107,7 +106,10 @@ int verifica_visoes_recursivo(transacao_t *original, int *ids, int n, int tam)
     {
         transacao_t *visao = gera_visao_serial(original, ids, tam);
         int resultado = visao_equivalente(original, visao, ids, tam);
-        // liberar memória de visao se necessário
+
+        // <<< CORREÇÃO CRÍTICA: Liberar a memória da visão que foi gerada >>>
+        libera_lista_transacoes(visao);
+
         return resultado;
     }
 
@@ -122,5 +124,14 @@ int verifica_visoes_recursivo(transacao_t *original, int *ids, int n, int tam)
 
 int verifica_equivalencia_visao(transacao_t *original, int *transacoes_id, int qtd)
 {
-    return verifica_visoes_recursivo(original, transacoes_id, qtd, qtd);
+    // Cria uma cópia do array de IDs para não modificar o original na main
+    int *ids_copia = malloc(qtd * sizeof(int));
+    memcpy(ids_copia, transacoes_id, qtd * sizeof(int));
+
+    int resultado = verifica_visoes_recursivo(original, ids_copia, qtd, qtd);
+
+    // Libera a cópia
+    free(ids_copia);
+
+    return resultado;
 }
